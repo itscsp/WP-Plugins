@@ -3,7 +3,7 @@ jQuery(document).ready(function ($) {
   $("#frm_add_employee").validate("");
 
   // Form Submit Handler
-  jQuery("#frm_add_employee").on("submit", function (event) {
+  $("#frm_add_employee").on("submit", function (event) {
     event.preventDefault();
 
     let formData = new FormData(this);
@@ -30,32 +30,8 @@ jQuery(document).ready(function ($) {
   //Call load employee
   loadEmployee();
 
-  //Open Add Empployee Form
-  jQuery(document).on("click", "#btn_open_add_employee_form", function () {
-    jQuery("#addEmployeLayout").toggleClass("hide_element");
-    jQuery(this).addClass("hide_element");
-
-
-  });
-
-  jQuery(document).on("click", "#btn-close_add_employee_form", () => {
-    jQuery("#addEmployeLayout").toggleClass("hide_element");
-    jQuery("#btn_open_add_employee_form").removeClass("hide_element");
-  });
-
-  jQuery(document).on("click", ".btn_edit_employee", () => {
-    jQuery("#editEmployeLayout").toggleClass("hide_element");
-    jQuery("#close_add_employee_form").removeClass("hide_element");
-  });
-
-  
-});
-
-let deleteLoadedDataLoaded = false;
-
-function deleteData() {
-  jQuery(".btn_delete_employee").on("click", function () {
-    console.log("I am here... ");
+  //Delete records from database
+  $(document).on("click", ".btn_delete_employee", function () {
     // Use a regular function
     let empId = jQuery(this).data("id"); // This will correctly refer to the clicked button
 
@@ -81,7 +57,90 @@ function deleteData() {
       });
     }
   });
-}
+
+  //Open Add Empployee Form
+  /**
+   * When user click on add Employee
+   * - Hide Edit form if open
+   * - Add close form button active
+   *
+   * When user click on Edit employee
+   * - Close Add form
+   * - Hide Add Employee button
+   *
+   */
+
+  // To show employee form and remove employee btn
+  $("#btn_open_add_employee_form").on("click", () => {
+    $("#addEmployeLayout").removeClass("hide_element");
+    $("#btn_open_add_employee_form").addClass("hide_element");
+  });
+
+  //Hide employee form and show add employee btn
+  $("#btn-close_add_employee_form").on("click", () => {
+    console.log("Hello");
+    $("#addEmployeLayout").addClass("hide_element");
+    $("#btn_open_add_employee_form").removeClass("hide_element");
+  });
+
+  // To show Edit Employee form and add employee btn
+  $(document).on("click", ".btn_edit_employee", function () {
+    $("#editEmployeLayout").removeClass("hide_element");
+    $("#btn_open_add_employee_form").addClass("hide_element");
+
+    // Get existing data by employee id and insert into form
+    let employee_id = $(this).data("id");
+
+    jQuery.ajax({
+      url: wce_object.ajax_url,
+      data: {
+        action: "wce_get_employee_by_id",
+        empId: employee_id,
+      },
+      method: "",
+      dataType: "",
+      success: function (response) {
+        let employee_data = response.data;
+        jQuery("#employee_name").val(employee_data.name);
+        jQuery("#employee_email").val(employee_data.email);
+        jQuery("#employee_designation").val(employee_data.designation);
+        jQuery("#employee_profile_icon").attr("src", employee_data.profile_image);
+        jQuery("#employee_id").val(employee_data.id);
+      },
+    });
+  });
+
+  // To hide edit employee form and show add employee form
+  $("#btn-close_edit_employee_form").on("click", () => {
+    $("#editEmployeLayout").addClass("hide_element");
+    $("#btn_open_add_employee_form").removeClass("hide_element");
+  });
+
+  $("#frm_edit_employee").on("submit", function (event) {
+    event.preventDefault();
+
+    let formData = new FormData(this);
+
+    jQuery.ajax({
+      url: wce_object.ajax_url,
+      data: formData,
+      method: "POST",
+      dataType: "json",
+      contentType: false,
+      processData: false,
+      success: function (response) {
+        if (response.status) {
+          alert(response.message);
+          setTimeout(() => {
+            loadEmployee();
+            $("#editEmployeLayout").addClass("hide_element");
+            $("#btn_open_add_employee_form").removeClass("hide_element");
+          }, 1000);
+        }
+      },
+    });
+  });
+});
 
 //Load all employee data from table
 function loadEmployee() {
@@ -94,10 +153,6 @@ function loadEmployee() {
     dataType: "json",
     success: (response) => {
       console.log(response);
-
-      /*
-
-            */
 
       var employeesDataHTML = "";
 
@@ -119,10 +174,6 @@ function loadEmployee() {
       });
 
       jQuery("#employee_data_tbody").html(employeesDataHTML);
-      if (!deleteLoaded) {
-        deleteData();
-        deleteLoaded = true;
-      }
     },
   });
 }

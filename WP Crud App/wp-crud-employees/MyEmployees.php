@@ -98,6 +98,21 @@ class MyEmployees
 
         //Handle files
         if (isset($_FILES['profile_image']['name'])) {
+            $UploadFile = $_FILES['profile_image'];
+
+            // $UploadFile['name'] - employee-1.webp
+
+            // Original File Name
+            $originalFileName = pathinfo($UploadFile['name'], PATHINFO_FILENAME); // employee-1
+
+            // File Extension
+            $file_extension = pathinfo($UploadFile['name'], PATHINFO_EXTENSION); // webp
+
+            // New Image Name
+            $newImageName = $originalFileName . "_" . time() . "." . $file_extension; // employee-1_89465133.webp
+
+            $_FILES['profile_image']['name'] = $newImageName;
+
             $fileUploaded = wp_handle_upload($_FILES['profile_image'], array('test_form' => false));
 
             $profile_image = $fileUploaded['url'];
@@ -156,7 +171,8 @@ class MyEmployees
     }
 
     // Delete employee data 
-    public function handleDeleteEmployeeData() {
+    public function handleDeleteEmployeeData()
+    {
         $employee_id = $_GET['empId'];
 
         $this->wpdb->delete($this->table_name, [
@@ -168,5 +184,121 @@ class MyEmployees
             "message" => "Employee Deleted Successfully"
         ]);
         exit;
+    }
+
+    // Get employee data by id
+    public function getEmployeeDataById()
+    {
+
+        $employee_id = $_GET['empId'];
+
+        if ($employee_id > 0) {
+            $employeeData = $this->wpdb->get_row(
+                "SELECT * FROM {$this->table_name} WHERE id = {$employee_id}",
+                ARRAY_A
+            );
+
+            return wp_send_json([
+                'status' => 1,
+                "message" => "Emploayee data for ID: ${$employee_id}",
+                'data' => $employeeData
+            ]);
+        } else {
+
+            return wp_send_json([
+                'status' => 0,
+                "message" => "Something went wrong, Try again.",
+            ]);
+        }
+
+        exit;
+    }
+
+    //Update user data
+    public function handleUpdateEmployeeData()
+    {
+        $id = sanitize_text_field($_POST["employee_id"]);
+        $name = sanitize_text_field($_POST["employee_name"]);
+        $email = sanitize_text_field($_POST["employee_email"]);
+        $designation = sanitize_text_field($_POST["employee_designation"]);
+
+        $employeeData = $this->getEmployeeData($id);
+
+        $profile_image_url = "";
+
+
+        if (!empty($employeeData)) {
+
+            $profile_image_url = $employeeData['profile_image'];
+
+            $profile_image_image = isset($_FILES['employee_profile_image']['name']) ? isset($_FILES['employee_profile_image']['name']) : "";
+
+            if (!empty($profile_image_image)) {
+                //Profile Image
+                //Handle files
+
+                if (!empty($profile_image_url)) {
+                    // http://localhost/wp/wp_plugin_course/wp-content/uploads/2024/08/employee-1.webp
+                    $wp_site_url = get_site_url(); //// http://localhost/wp/wp_plugin_course/
+                    $file_path = str_replace($wp_site_url . '/', "", $profile_image_url); //wp-content/uploads/2024/08/employee-1.webp
+
+                    if (file_exists(ABSPATH . $file_path)) {
+                        //Remove the file from uploads folder
+                        unlink(ABSPATH . $file_path);
+                    }
+                    $UploadFile = $_FILES['profile_image_image'];
+    
+                    // $UploadFile['name'] - employee-1.webp
+    
+                    // Original File Name
+                    $originalFileName = pathinfo($UploadFile['name'], PATHINFO_FILENAME); // employee-1
+    
+                    // File Extension
+                    $file_extension = pathinfo($UploadFile['name'], PATHINFO_EXTENSION); // webp
+    
+                    // New Image Name
+                    $newImageName = $originalFileName . "_" . time() . "." . $file_extension; // employee-1_89465133.webp
+    
+                    $_FILES['profile_image']['name'] = $newImageName;
+                }
+
+
+                // //$UploadFile['name'] - image-name.webp
+
+                //Upload New Image
+                $fileUploaded = wp_handle_upload($_FILES['employee_profile_image'], array('test_form' => false));
+                $profile_image_url = $fileUploaded['url'];
+            }
+
+            $this->wpdb->update($this->table_name, [
+                "name" => $name,
+                "email" => $email,
+                "designation" => $designation,
+                "profile_image" => $profile_image_url,
+            ], [
+                "id" => $id
+            ]);
+
+            return wp_send_json([
+                "status" => true,
+                "message" => "Employee updated successfully"
+            ]);
+        } else {
+            return wp_send_json([
+                'status' => false,
+                'message' => "No Employee found wih this ID"
+            ]);
+        }
+    }
+
+    //Get empployee Data
+    private function getEmployeeData($employee_id)
+    {
+        $employeeData = $this->wpdb->get_row(
+            "SELECT * FROM ($this->table_name) WHERE id = ($employee_id)",
+            ARRAY_A
+        );
+
+        return $employeeData;
     }
 }

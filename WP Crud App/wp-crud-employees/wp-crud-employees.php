@@ -41,4 +41,10 @@ add_action("wp_ajax_wce_load_employees_data", [$employeeObject, 'handleLoadEmplo
 
 //Delete user on click
 add_action("wp_ajax_wce_delete_employee", [$employeeObject, "handleDeleteEmployeeData"]);
+
+//Get single user data
+add_action("wp_ajax_wce_get_employee_by_id", [$employeeObject, "getEmployeeDataById"]);
+
+//Update user data
+add_action('wp_ajax_wce_edit_employee', [$employeeObject, "handleUpdateEmployeeData"])
 ?>

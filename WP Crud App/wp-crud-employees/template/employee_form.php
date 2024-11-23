@@ -1,7 +1,7 @@
 <div id="wp_employee_crud_plugin">
     <!-- Add Employee -->
     <div class="form-container hide_element" id="addEmployeLayout">
-        <button id="btn-close_add_employee_form" >Close Form</button>
+        <button id="btn-close_add_employee_form" style="float: right;">Close Form</button>
 
         <h3>Add Empployees</h3>
 
@@ -39,14 +39,13 @@
 
     <!-- Edit Employee -->
     <div class="form-container hide_element" id="editEmployeLayout">
-
-    <button id="btn-close_edit_employee_form" >Close Form</button>
-
-
+        <div class="form-group">
+            <button id="btn-close_edit_employee_form" style="float: right;">Close Form</button>
+        </div>
         <h3>Edit Employee</h3>
-
         <form action="javascript:void(0)" id="frm_edit_employee" enctype="multipart/form-data">
             <input type="hidden" name="action" value="wce_edit_employee">
+            <input type="hidden" name="employee_id" id="employee_id" value="" />
             <div class="form-group">
                 <label for="employee_name">Name</label>
                 <input type="text" name="employee_name" placeholder="Employee name" id="employee_name" required>
@@ -68,11 +67,13 @@
             <div class="form-group">
 
                 <label for="employee_file">Profile Image</label>
-                <input type="file" name="employee_profile_image" id="employee_file">
+                <input type="file" name="employee_profile_image" id="profile_image_image">
+                <br>
+                <img id="employee_profile_icon" width="100px" src="" alt="">
             </div>
             <div class="form-group">
 
-                <button id="btn_update_data" type="submit">Update Employee</button>
+                <button id="btn_update_data" type="submit" class="btns btn-success">Update Employee</button>
             </div>
         </form>
     </div>
@@ -80,24 +81,24 @@
 
 
     <!-- List Emplayee Layout -->
-     <div class="list-container">
+    <div class="list-container">
         <button id="btn_open_add_employee_form" style="float: right;">Add Employee</button>
-        
-         <h3>List Empployees</h3>
-         <table>
-             <thead>
-                 <th>#ID</th>
-                 <th>#Name</th>
-                 <th>#Email</th>
-                 <th>#Designation</th>
-                 <th>#Profile Image</th>
-                 <th>#Action</th>
-             </thead>
-             <tbody id="employee_data_tbody">
-     
-             </tbody>
-         </table>
-     </div>
+
+        <h3>List Empployees</h3>
+        <table>
+            <thead>
+                <th>#ID</th>
+                <th>#Name</th>
+                <th>#Email</th>
+                <th>#Designation</th>
+                <th>#Profile Image</th>
+                <th>#Action</th>
+            </thead>
+            <tbody id="employee_data_tbody">
+
+            </tbody>
+        </table>
+    </div>
 
     <!-- List Emplayee Layout End -->
 
