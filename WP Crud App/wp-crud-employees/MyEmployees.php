@@ -154,4 +154,19 @@ class MyEmployees
 
         exit;
     }
+
+    // Delete employee data 
+    public function handleDeleteEmployeeData() {
+        $employee_id = $_GET['empId'];
+
+        $this->wpdb->delete($this->table_name, [
+            'id' => $employee_id
+        ]);
+
+        return wp_send_json([
+            "status" => true,
+            "message" => "Employee Deleted Successfully"
+        ]);
+        exit;
+    }
 }

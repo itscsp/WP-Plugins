@@ -38,4 +38,7 @@ add_action("wp_ajax_wce_add_employee", [$employeeObject, "handleAddEmployeeFormD
 
 // Load Employee data into frontend
 add_action("wp_ajax_wce_load_employees_data", [$employeeObject, 'handleLoadEmployeeData']);
+
+//Delete user on click
+add_action("wp_ajax_wce_delete_employee", [$employeeObject, "handleDeleteEmployeeData"]);
 ?>

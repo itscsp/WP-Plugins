@@ -1,0 +1,158 @@
+
+/* Container Styles */
+#wp_employee_crud_plugin {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+/* Heading Styles */
+#wp_employee_crud_plugin h3 {
+    color: #2c3338;
+    font-size: 24px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #135e96;
+}
+
+/* Form Styles */
+#frm_add_employee {
+    background: #fff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+#frm_add_employee p {
+    margin-bottom: 20px;
+}
+
+#frm_add_employee label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #1d2327;
+}
+
+#frm_add_employee input[type="text"],
+#frm_add_employee input[type="email"],
+#frm_add_employee select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+#frm_add_employee input[type="file"] {
+    padding: 10px 0;
+}
+
+#frm_add_employee input:focus,
+#frm_add_employee select:focus {
+    border-color: #135e96;
+    outline: none;
+    box-shadow: 0 0 0 1px #135e96;
+}
+
+
+label.error {
+    font-size: 14px;
+    color: darkred !important;
+}
+
+
+/* Button Styles */
+#btn_save_data,
+.btn_edit_employee,
+.btn_delete_employee {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+#btn_save_data {
+    background-color: #135e96;
+    color: white;
+}
+
+#btn_save_data:hover {
+    background-color: #0a4b78;
+}
+
+.btn_edit_employee {
+    background-color: #2271b1;
+    color: white;
+    margin-right: 8px;
+}
+
+.btn_edit_employee:hover {
+    background-color: #135e96;
+}
+
+.btn_delete_employee {
+    background-color: #dc3232;
+    color: white;
+}
+
+.btn_delete_employee:hover {
+    background-color: #b32d2d;
+}
+
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+thead {
+    background-color: #135e96;
+    color: white;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+th {
+    font-weight: 600;
+}
+
+tbody tr:hover {
+    background-color: #f5f5f5;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 768px) {
+    table {
+        display: block;
+        overflow-x: auto;
+    }
+    
+    #frm_add_employee {
+        padding: 15px;
+    }
+    
+    .btn_edit_employee,
+    .btn_delete_employee {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+}
+
+
+.hide_element {
+    display: none;
+}
