@@ -28,5 +28,14 @@ register_activation_hook(__FILE__, [$employeeObject, "callPluginActivationFuncti
 register_deactivation_hook(__FILE__, [$employeeObject, 'dropEmployeesTable']);
 
 // Register Shortcode
-add_shortcode("wp-employee-form", [$employeeObject, "createEmployeeForm"])
+add_shortcode("wp-employee-form", [$employeeObject, "createEmployeeForm"]);
+
+//Link styles and script
+add_action('wp_enqueue_scripts', [$employeeObject, "addAssetsToPlugin"]);
+
+//Process Ajax Request
+add_action("wp_ajax_wce_add_employee", [$employeeObject, "handleAddEmployeeFormData"]);
+
+// Load Employee data into frontend
+add_action("wp_ajax_wce_load_employees_data", [$employeeObject, 'handleLoadEmployeeData']);
 ?>
